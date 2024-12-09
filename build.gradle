@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+group = 'org.verve'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Jakarta RESTful Web Services API
+    implementation 'jakarta.ws.rs:jakarta.ws.rs-api:3.1.0'
+
+    implementation 'jakarta.servlet:jakarta.servlet-api:6.1.0'
+
+    // Jersey Core for Jakarta RESTful Web Services
+    implementation 'org.glassfish.jersey.core:jersey-server:3.1.8'
+
+    implementation 'org.glassfish.jersey.inject:jersey-hk2:3.1.8'
+
+    // Grizzly HTTP server for embedded use
+    implementation 'org.glassfish.jersey.containers:jersey-container-grizzly2-http:3.1.8'
+
+    // Jersey Client for calling external REST APIs
+    implementation 'org.glassfish.jersey.core:jersey-client:3.1.8'
+
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.0'
+
+    implementation 'redis.clients:jedis:5.2.0'
+
+    implementation 'org.glassfish.jaxb:jaxb-runtime:4.0.5'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+shadowJar {
+    archiveBaseName.set('jersey-app')
+    archiveVersion.set('1.0-SNAPSHOT')
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'org.verve.VerveApplication'
+        )
+    }
+}
+
