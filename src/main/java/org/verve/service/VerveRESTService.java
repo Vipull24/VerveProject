@@ -19,6 +19,7 @@ import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.verve.ConfigLoader;
 import org.verve.logger.LogToFile;
 import redis.clients.jedis.Jedis;
 import org.verve.redis.RedisClient;
@@ -30,8 +31,8 @@ public class VerveRESTService {
     private static final Logger logger = Logger.getLogger(VerveRESTService.class.getName());
 
     private static final ExecutorService executorService = new ThreadPoolExecutor(
-            100, // Core pool size
-            10000, // Maximum pool size
+            Integer.parseInt(ConfigLoader.getInstance().getProperty("threadpool.size.min", "100")), // Core pool size
+            Integer.parseInt(ConfigLoader.getInstance().getProperty("threadpool.size.max", "10000")), // Maximum pool size
             60L, TimeUnit.SECONDS, // Keep-alive time for idle threads
             new SynchronousQueue<>());
 
