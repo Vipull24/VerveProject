@@ -2,15 +2,15 @@
 
 The Application is a Java-based RESTful service designed to handle requests via the /api/verve/accept endpoint. It leverages asynchronous HTTP requests and Redis for ID management and expiry control, providing efficient request handling and logging.
 
-Approach
-- The application receives a GET request with endpoint(optional) and id as query parameters.
-- It checks if id is present in Redis, if not, it increments the counter and stores the id in Redis with an expiry set to the end of the minute.
-- It then sends an asynchronous HTTP POST request to the endpoint with the unique ID count for that minute.
-- A thread which runs at the start of each minute resets the unique ID count for that minute and logs the count for the previous minute.
-- Access/operation to count is synchronized to ensure thread safety.
-- Sliding window approach is used to manage the unique ID count for each minute.
-- To prevent de-duplication, the application is reliant on Redis to manage unique IDs and expiry.
-- To handle the high volume of requests, the application uses an Executor Service with a ThreadPoolExecutor to manage a pool of threads which dynamically adjusts the number of threads based on the load.
+### Approach
+- The application receives a _GET_ request with endpoint (optional) and id as query parameters.
+- It checks if the id is present in Redis. If not, it increments the counter and stores the id in Redis with an expiry set to the end of the current minute.
+- It then sends an asynchronous _HTTP POST_ request to the endpoint with the unique ID count for that minute.
+- A thread runs at the start of each minute to reset the unique ID count for the new minute and logs the count for the previous minute.
+- Access/operation to the counter is synchronized to ensure thread safety.
+- A sliding window approach is used to manage the unique ID count for each minute.
+- To prevent id deduplication when service is behind load balancer, the application relies on Redis to manage unique IDs and their expiry.
+- To handle a high volume of requests, the application uses an _ExecutorService_ with a _ThreadPoolExecutor_ to manage a pool of threads, which dynamically adjusts the number of threads based on the load.
 
 ### _Key Components_
 
